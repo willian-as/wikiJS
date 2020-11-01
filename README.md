@@ -2,7 +2,7 @@
 
 ## Criação do cluster
 
-Utilizando o [k3d](https://github.com/rancher/k3d), criamos o cluster com 3 nodes (1 master e 2 workers)
+Utilizando o [k3d](https://github.com/rancher/k3d), criamos o cluster com 3 nodes (1 master e 2 workers):
 
 ```
 $ k3d cluster create esig --agents 2
@@ -19,7 +19,7 @@ INFO[0040] You can now use it like this:
 kubectl cluster-info
 ```
 
-O Wiki.JS se divide entre o banco (PostgreSQL) e a aplicaçao em si.
+O Wiki.js se divide entre o banco (PostgreSQL) e a aplicaçao em si.
 Com isso, foram criados os seguintes manifestos:
 
 ```
@@ -37,7 +37,7 @@ total 8
 -rw-rw-r-- 1 willian willian 199 nov  1 14:50 Service.yaml
 ```
 
-Apos a criaçao de todos os recursos, podemos verifica-los e acessar a aplicaçao.
+Apos a criação de todos os recursos, podemos verificá-los e acessar a aplicação:
 
 ```
 $ kubectl get all -n wikijs 
