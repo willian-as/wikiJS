@@ -20,7 +20,7 @@ kubectl cluster-info
 ```
 
 O Wiki.js se divide entre o banco (PostgreSQL) e a aplicaçao em si.
-Com isso, foram criados os seguintes manifestos:
+Com isso, foram criados os seguintes Objetos:
 
 ```
 ~/projeto-esig/wikijs/postgres$ ls -l
@@ -37,7 +37,7 @@ total 8
 -rw-rw-r-- 1 willian willian 199 nov  1 14:50 Service.yaml
 ```
 
-Apos a criação de todos os recursos, podemos verificá-los e acessar a aplicação:
+Apos a criação de todos os Objetos, podemos verificar os recursos e acessar a aplicação:
 
 ```
 $ kubectl get all -n wikijs 
