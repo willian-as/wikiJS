@@ -18,17 +18,12 @@ namespace/wikijs created
 
 ### Criação dos objetos
 ```
-$ kubectl create -f postgres/Service.yaml 
-
-$ kubectl create -f postgres/PersistentVolume.yaml 
-
+$ kubectl create -f postgres/Service.yaml
+$ kubectl create -f postgres/PersistentVolume.yaml
 $ kubectl create -f postgres/Secret.yaml
-
 $ kubectl create -f postgres/StatefulSet.yaml
-
-$ kubectl create -f wikijs/Service.yaml 
-
-$ kubectl create -f wikijs/Deployment.yaml
+$ kubectl create -f wiki/Service.yaml
+$ kubectl create -f wiki/Deployment.yaml
 ```
 
 ### Overview
