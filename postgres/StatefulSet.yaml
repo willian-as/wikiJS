@@ -1,50 +1,45 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: postgres-statefulset
+  name: postgres
   namespace: wikijs
 spec:
   selector:
     matchLabels:
-      app: postgres-statefulset
-  serviceName: "postgres-statefulset"
-  replicas: 2
+      app: postgres
+  serviceName: "postgres"
+  replicas: 1
   template:
     metadata:
       labels:
-        app: postgres-statefulset
+        app: postgres
     spec:
       containers:
       - name: postgres
         image: postgres:12
         env:
-        - name: POSTGRES_ROOT_PASSWORD
+        - name: POSTGRES_DB
           valueFrom:
             secretKeyRef:
-              name: postgres-secret
-              key: ROOT_PASSWORD
-        - name: POSTGRES-DB
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: DATABASE
+              name: postgres
+              key: POSTGRES_DB
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:
-              name: postgres-secret
-              key: USER
+              name: postgres
+              key: POSTGRES_USER
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: postgres-secret
-              key: PASSWORD
+              name: postgres
+              key: POSTGRES_PASSWORD
         ports:
         - containerPort: 5432
           name: postgresdb
         volumeMounts:
-        - name: pv-data
+        - name: pgdata
           mountPath: /var/lib/postgresql/data
       volumes:
-      - name: pv-data
+      - name: pgdata
         persistentVolumeClaim:
-          claimName: postgres-pv-claim
+          claimName: postgres
