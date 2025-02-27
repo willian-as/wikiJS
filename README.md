@@ -5,54 +5,41 @@
 Utilizando o [k3d](https://github.com/rancher/k3d), criamos o cluster com 3 nodes (1 server e 2 workers):
 
 ```
-$ k3d cluster create esig --agents 2
+$ k3d cluster create wikijs --agents 2 --api-port 6550 -p "8081:80@loadbalancer"
 ```
 
 ## Subindo o projeto
 
-### Namespace da aplicação
-```
-$ kubectl create -f postgres/Namespace.yaml
-namespace/wikijs created
-```
-
 ### Criação dos objetos
 ```
-$ kubectl create -f postgres/Service.yaml
-$ kubectl create -f postgres/PersistentVolume.yaml
-$ kubectl create -f postgres/Secret.yaml
-$ kubectl create -f postgres/StatefulSet.yaml
-$ kubectl create -f wiki/Service.yaml
-$ kubectl create -f wiki/Deployment.yaml
+$ kubectl create -f postgres/
+$ kubectl create -f wiki/
 ```
 
 ### Overview
 ```
-$ kubectl get all -n wikijs 
-NAME                                 READY   STATUS        RESTARTS   AGE
-pod/postgres-statefulset-0           1/1     Running       0          4h29m
-pod/postgres-statefulset-1           1/1     Running       0          61m
-pod/wikijs-deploy-5fd9cfb959-mjbx7   1/1     Running       0          29s
-pod/svclb-wikijs-service-rbtrf       1/1     Running       0          23s
-pod/svclb-wikijs-service-5tnbg       1/1     Running       0          12s
-pod/svclb-wikijs-service-88dtt       1/1     Running       0          3s
+$ kubectl get all -n wikijs -o wide
+NAME                          READY   STATUS    RESTARTS   AGE   IP          NODE               NOMINATED NODE   READINESS GATES
+pod/postgres-0                1/1     Running   0          75m   10.42.0.4   k3d-dtp-agent-0    <none>           <none>
+pod/wikijs-5bc4c7444d-jcwvh   1/1     Running   0          37m   10.42.3.7   k3d-dtp-server-0   <none>           <none>
 
-NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
-service/postgres-service   ClusterIP      10.43.48.94     <none>        5432/TCP         4h29m
-service/wikijs-service     LoadBalancer   10.43.162.253   172.17.0.2    3000:32743/TCP   55m
+NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE   SELECTOR
+service/postgres   ClusterIP   10.43.110.146   <none>        5432/TCP   75m   app=postgres
+service/wikijs     ClusterIP   10.43.64.243    <none>        3000/TCP   37m   app=wikijs
 
-NAME                                  DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
-daemonset.apps/svclb-wikijs-service   3         3         3       3            3           <none>          55m
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES            SELECTOR
+deployment.apps/wikijs   1/1     1            1           37m   wikijs       requarks/wiki:2   app=wikijs
 
-NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/wikijs-deploy   1/1     1            1           13m
+NAME                                DESIRED   CURRENT   READY   AGE   CONTAINERS   IMAGES            SELECTOR
+replicaset.apps/wikijs-5bc4c7444d   1         1         1       37m   wikijs       requarks/wiki:2   app=wikijs,pod-template-hash=5bc4c7444d
 
-NAME                                       DESIRED   CURRENT   READY   AGE
-replicaset.apps/wikijs-deploy-5fd9cfb959   1         1         1       29s
-
-NAME                                    READY   AGE
-statefulset.apps/postgres-statefulset   2/2     4h29m
+NAME                        READY   AGE   CONTAINERS   IMAGES
+statefulset.apps/postgres   1/1     75m   postgres     postgres:12
 ```
 ### Acesso à aplicação
+
+```
+$ http://localhost:8081/
+```
 
 ![Captura](https://github.com/willian-as/wikiJS/blob/main/images/Captura%20de%20tela%20de%202020-11-01%2019-30-50.png)
