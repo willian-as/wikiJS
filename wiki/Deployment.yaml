@@ -19,28 +19,9 @@ spec:
         - name: wikijs
           image: requarks/wiki:2
           imagePullPolicy: IfNotPresent
-          env:
-            - name: DB_TYPE
-              value: "postgres"
-            - name: DB_HOST
-              value: "postgres"
-            - name: DB_PORT
-              value: "5432"  
-            - name: DB_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: postgres
-                  key: POSTGRES_DB
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: postgres
-                  key: POSTGRES_USER
-            - name: DB_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: postgres
-                  key: POSTGRES_PASSWORD 
+          envFrom:
+          - secretRef:
+              name: wikijs
           ports:
           - containerPort: 3000
             protocol: TCP
